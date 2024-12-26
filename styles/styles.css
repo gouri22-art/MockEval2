@@ -1,0 +1,36 @@
+/* navbar styling */
+nav{
+    display: flex;
+    gap: 10px;
+    background-color: #ddd;
+    padding: 10px;
+}
+/* main-content styling */
+main{
+    padding: 20px;
+
+}
+/* form styling */
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* section styling */
+
+#questions-grid, #reviewed-questions-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
+    gap: 20px;
+}
+
+.card{
+    border: 2px solid blue;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.card .reviewed{
+    border-color: violet;
+}
