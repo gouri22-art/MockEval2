@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3000/questions";
+const baseUrl = "https://beryl-ember-havarti.glitch.me/questions";
 
 //index.html-login validation
 if (location.pathname.includes('index.html')) {
@@ -26,7 +26,7 @@ if (location.pathname.includes('quiz.html')) {
             if (!res.ok) throw new Error('Failed to fetch questions');
             const questions = await res.json();
             renderQuestions(questions);
-        }catch(error){
+        } catch (error) {
             console.error(error.message);
             alert('Error fetching question.Please try again later.');
         }
@@ -36,10 +36,13 @@ if (location.pathname.includes('quiz.html')) {
     const renderQuestions = (questions) => {
         const grid = document.getElementById('questions-grid');
         grid.innerHTML = ' ';
-
+        if (!Array.isArray(questions) || questions.length == 0) {
+            grid.innerHTML = '<p>No questions available.</p>';
+            return;
+        }
         questions.forEach((q) => {
             const card = document.createElement('div');
-            card.className =`card ${q.reviewStatus? 'reviewed':' '}`;
+            card.className = `card ${q.reviewStatus ? 'reviewed' : ' '}`;
 
             // if (q.reviewStatus) card.classList.add('reviewed');
             card.innerHTML = `
@@ -94,33 +97,33 @@ if (location.pathname.includes('quiz.html')) {
         // });
         // alert('Question Creaded');
         // fetchQuestions();
-        try{
-            const response = await fetch(baseUrl,{
-                method:'POST',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify(question),
+        try {
+            const response = await fetch(baseUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(question),
 
             });
-            if(!response.ok)throw new Error('Failed to add Question');
+            if (!response.ok) throw new Error('Failed to add Question');
             alert('Question Created');
             fetchQuestions();
 
-        }catch(error){
+        } catch (error) {
             console.log(error.message);
             alert('Error adding questions.Please try again later.');
         }
     });
 
     // fetchQuestions();
-    const reviewedQuestion = async (id)=>{
-        try{
-            const response = await fetch(`${baseUrl}${id}`,{
-                method:'PATCH',
-                headers:{'Content-Type':'application/json'},
-                body:JSON.stringify({reviewStatus:true}),
+    const reviewedQuestions = async (id) => {
+        try {
+            const response = await fetch(`${baseUrl}${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reviewStatus: true }),
             });
-            if(!response.ok)throw new Error('Failed to review question');
-        }catch(error){
+            if (!response.ok) throw new Error('Failed to review question');
+        } catch (error) {
             console.log(error.message);
             alert('Error reviewing questions.Please try again later.')
         }
@@ -135,13 +138,20 @@ if (location.pathname.includes('questions.html')) {
         // const questions = await res.json();
         // const reviewedQuestions = questions.filter((q) => q.reviewStatus);
         // renderQuestions(reviewedQuestions);
-        try{
+        try {
             const response = await fetch(baseUrl);
-            if(!response.ok)throw new Error('Failed to fetch questions');
+            if (!response.ok) throw new Error('Failed to fetch questions');
             const questions = await response.json();
-            const reviewedQuestions = questions.filter((q)=>q.reviewStatus);
+            const reviewedQuestions = questions.filter((q) =>{
+            console.log(`questions:${q.title},Review status:${q.reviewStatus}`);
+            return q.reviewStatus == true;
+            });
+            console.log("filtered questions:",renderQuestions)
+            if(reviewedQuestions.length == 0){
+                console.log('No review questions found.')
+            }
             renderQuestions(reviewedQuestions);
-        }catch(error){
+        }catch (error) {
             console.log(error.message)
             alert('Error fetching questions.Please try again later.')
         }
@@ -149,6 +159,10 @@ if (location.pathname.includes('questions.html')) {
     const renderQuestions = (questions) => {
         const grid = document.getElementById('reviewed-questions-grid');
         grid.innerHTML = ' ';
+        if(questions.length == 0){
+            grid.innerHTML=' <p>No reviewed questions available.</p>';
+            return;
+        }
         questions.forEach((q) => {
             const card = document.createElement('div');
             card.classList.add('card', 'reviewed');
