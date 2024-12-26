@@ -8,7 +8,30 @@
  
 </head>
 <body>
-    
+    <nav>
+        <a href="./index.html">Home</a>
+        <a href="./quiz.html">Quiz</a>
+        <a href="./questions.html">Questions</a>
+    </nav>
+    <main>
+        <h1>Quiz Management</h1>
+        <form id="add-question-form">
+            <label for="question">Question Statement:</label>
+            <input type="text" id="question" required>
+            <label for="optionA">Option A:</label>
+            <input type="text" id="optionA" required>
+            <label for="optionB">Option B:</label>
+            <input type="text" id="optionB" required>
+            <label for="optionC">Option C:</label>
+            <input type="text" id="optionC" required>
+            <label for="optionD">Option D:</label>
+            <input type="text" id="optionD" required>
+            <label for="correctOption">Correct Option:</label>
+            <input type="text" id="correctOption" required>
+            <button type="submit">Add Question</button>
+        </form>
+        <section id="questions-grid"></section>
+    </main>
 </body>
 <script src="./scripts/script.js"></script>
 </html>
